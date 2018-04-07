@@ -40,6 +40,10 @@ namespace Lab4ED1.Controllers
         {
             return View();
         }
+        public ActionResult Lista()
+        {
+            return View();
+        }
 
         // POST: Calcomania/Create
         [HttpPost]
@@ -56,7 +60,45 @@ namespace Lab4ED1.Controllers
                 return View();
             }
         }
+        public ActionResult Buscar(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
 
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult Buscar1(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult Lista(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
         // GET: Calcomania/Edit/5
         public ActionResult Edit(int id)
         {

@@ -38,22 +38,7 @@ namespace Lab4ED1.Controllers
 
             return View(cg);
         }
-        public ActionResult Buscar1(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Calcomania cg = db..Find(x => x.noPartido == id);
-
-            if (cg == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(cg);
-        }
+       
         public ActionResult Buscar1(string id)
         {
             if (id == null)
@@ -70,7 +55,10 @@ namespace Lab4ED1.Controllers
 
             return View(cg);
         }
-
+        public ActionResult Lista()
+        {
+            return View(db.listaNoPartidoCargados.ToList());
+        }
 
 
         public ActionResult IndexInNoPartido()

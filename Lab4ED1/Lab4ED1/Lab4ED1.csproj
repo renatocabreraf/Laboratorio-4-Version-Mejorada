@@ -297,6 +297,7 @@
     <Content Include="Views\Calcomania\Create.cshtml" />
     <Content Include="Views\Calcomania\Buscar.cshtml" />
     <Content Include="Views\Calcomania\Buscar1.cshtml" />
+    <Content Include="Views\Calcomania\Listado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,43 @@
+﻿@using Lab4ED1.Models;
+@model IEnumerable<Lab4ED1.Models.Calcomania>
+
+@{
+    ViewBag.Title = "Listado";
+}
+<h2>¡Completa ya tu Colección Oficial de stickers de la COPA MUNDIAL FIFA™</h2>
+<pages validaterequest="false"></pages>
+
+@using (Html.BeginForm("Buscar", "CargaPartido", FormMethod.Get, new { enctype = "multipart/form-data" }))
+{
+    <h2>Buscar unicamente por numero</h2>
+    @Html.TextBox("id")
+    <input type="submit" name="id" value="Buscar Numero" />
+}
+
+<br />
+<br />
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numero)
+        </th>
+       
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numero)
+            </td>
+            
+        </tr>
+    }
+</table>
