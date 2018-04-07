@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Lab4ED1.Models
 {
-    public class Listado
+    public class Lista<T>
     {
         List<T> faltantes = new List<T>();
         List<T> coleccionadas = new List<T>();
