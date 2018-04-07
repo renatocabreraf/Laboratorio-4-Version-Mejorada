@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="innerArea">
+            <div class="main-logo">
+                <a href="/"><picture><source srcset="https://2018fifaworldcuprussia.paninigroup.com/_Resources/Static/Packages/Panini.StickerWorldCup/Images/2018fwc_SiteTitle_SM.png" media="(min-width: 576px) and (max-width: 992px)" /><img src="https://2018fifaworldcuprussia.paninigroup.com/_Resources/Static/Packages/Panini.StickerWorldCup/Images/2018fwc_SiteTitle_LG.png" alt="2018 FIFA World Cup Russia™ - Official licensed product" /></picture></a>
+            </div>
+
+
+
+            <button class="nav-expander" type="button" data-toggle="collapse" data-target="#main-navigation" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars fa-2x"></i>
+            </button>
+
+            <nav id="main-navigation" class="collapse nav-main">
+                <ul>
+
+                    <li class="dropdown">
+
+
+                        <a href="">Carga de datos Json</a>
+
+
+                    </li>
+
+
+
+                    <li class="dropdown">
+
+
+                        <a href="/es_ve/missing-stickers">Stickers faltantes</a>
+
+
+                    </li>
+
+                    <li class="dropdown">
+
+
+                        <a href="https://crm.paninigroup.com/crm/wcsr2018/es/stage/1">Control de Stickers por Tipo</a>
+
+
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
+
+    </header>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Renato Cabrera y José Herrera de la Universidad Rafael Landívar de Guatemala</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
