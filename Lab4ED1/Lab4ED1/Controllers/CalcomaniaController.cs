@@ -30,6 +30,16 @@ namespace Lab4ED1.Controllers
         {
             return View();
         }
+        // GET: Calcomania/Buscar
+        public ActionResult Buscar()
+        {
+            return View();
+        }
+        // GET: Calcomania/Buscar1
+        public ActionResult Buscar1()
+        {
+            return View();
+        }
 
         // POST: Calcomania/Create
         [HttpPost]

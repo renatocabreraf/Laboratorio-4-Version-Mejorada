@@ -7,7 +7,7 @@ namespace Lab4ED1.Models
 {
     public class Calcomania
     {
-        string nombre { get; set; }
-        int numero { get; set; }
+        public string nombre { get; set; }
+        public int numero { get; set; }
     }
 }

@@ -7,8 +7,8 @@ namespace Lab4ED1.Models
 {
     public class Lista<T>
     {
-        List<T> faltantes = new List<T>();
-        List<T> coleccionadas = new List<T>();
-        List<T> cambios = new List<T>();
+        public List<T> faltantes = new List<T>();
+        public List<T> coleccionadas = new List<T>();
+        public List<T> cambios = new List<T>();
     }
 }

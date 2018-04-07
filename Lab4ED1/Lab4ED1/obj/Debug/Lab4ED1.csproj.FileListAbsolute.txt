@@ -90,3 +90,6 @@ C:\Users\JoseCarlos\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4
 C:\Users\JoseCarlos\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\Users\JoseCarlos\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\bin\Newtonsoft.Json.xml
 C:\Users\JoseCarlos\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\bin\System.Diagnostics.DiagnosticSource.xml
+C:\Users\Renato\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\obj\Debug\Lab4ED1.csprojResolveAssemblyReference.cache
+C:\Users\Renato\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\obj\Debug\Lab4ED1.dll
+C:\Users\Renato\Documents\GitHub\Laboratorio-4-Version-Mejorada\Lab4ED1\Lab4ED1\obj\Debug\Lab4ED1.pdb
