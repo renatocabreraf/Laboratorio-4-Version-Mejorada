@@ -12,7 +12,7 @@ namespace Lab4ED1.Controllers
     public class CalcomaniaController : Controller
     {
         DefaultConnection db = DefaultConnection.getInstance;
-
+        
         // GET: Calcomania
         public ActionResult Index()
         {

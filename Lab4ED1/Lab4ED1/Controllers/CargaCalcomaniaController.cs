@@ -22,14 +22,25 @@ namespace Lab4ED1.Controllers
             return View();
         }
 
+        public ActionResult Buscar1()
+        {
+            return View(db.listaCalcomaniaColeccionada.ToList());
+        }
+       
+        
+        public ActionResult Listado()
+        {
+            return View(db.listaCalcomaniaFaltantes.ToList());
+        }
+
         public ActionResult Buscar(int id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
+            Calcomania cg = db.listaCalcomaniaColeccionada.Find(x => x.numero == id);
 
             if (cg == null)
             {
@@ -38,14 +49,6 @@ namespace Lab4ED1.Controllers
 
             return View(cg);
         }
-       
-        
-        public ActionResult Lista()
-        {
-            return View(db.listaCalcomaniasCargadas.ToList());
-        }
-
-
       
 
         // GET: CargaPartido/Details/5
@@ -59,8 +62,11 @@ namespace Lab4ED1.Controllers
         {
             return View();
         }
+        public ActionResult Create1()
+        {
+            return View();
+        }
 
-       
 
         // POST: CargaPartido/Create
         [HttpPost]
@@ -89,7 +95,7 @@ namespace Lab4ED1.Controllers
                 string csvData = System.IO.File.ReadAllText(filepath);
 
                
-                db.listaCalcomaniasEstadoCargadas.Clear();
+                db.listaCalcomaniasCargadas.Clear();
                 Lista<Calcomania> listado = new Lista<Calcomania>();
                 try
                 {
@@ -97,16 +103,46 @@ namespace Lab4ED1.Controllers
                     
                     foreach (JProperty property in json.Properties())
                     {
-
-                        string x = property.Value.ToString();
-                        Calcomania y = JsonConvert.DeserializeObject<Calcomania>(x);
                         
-                        db.CargaAlbum.Add(y, y.listado);
-
-
+                        string x = property.Value.ToString();
+                        Lista<int> y = JsonConvert.DeserializeObject<Lista<int>>(x);
+                        db.DiccionarioListados.Add(y.nombre, y);
                     }
-                   
-                    
+                    for (int i = 0; i < db.DiccionarioListados.Values.Count; i++)
+                    {
+
+                        for (int j = 0; j < db.DiccionarioListados.Values.ElementAt(i).coleccionadas.Count; j++)
+                        {
+                            Calcomania nuevaCalcomania = new Calcomania();
+                            nuevaCalcomania.nombre = db.DiccionarioListados.Values.ElementAt(i).nombre;
+                            nuevaCalcomania.numero = db.DiccionarioListados.Values.ElementAt(i).coleccionadas.ElementAt(j);
+                            db.listaCalcomaniaColeccionada.Add(nuevaCalcomania);
+                            db.listaCalcomaniasCargadas.Add(nuevaCalcomania);
+                        }
+                        for (int j = 0; j < db.DiccionarioListados.Values.ElementAt(i).cambios.Count; j++)
+                        {
+                            Calcomania nuevaCalcomania = new Calcomania();
+                            nuevaCalcomania.nombre = db.DiccionarioListados.Values.ElementAt(i).nombre;
+                            nuevaCalcomania.numero = db.DiccionarioListados.Values.ElementAt(i).cambios.ElementAt(j);
+                            db.listaCalcomaniaCambios.Add(nuevaCalcomania);
+                            db.listaCalcomaniasCargadas.Add(nuevaCalcomania);
+                        }
+                        for (int j = 0; j < db.DiccionarioListados.Values.ElementAt(i).faltantes.Count; j++)
+                        {
+                            Calcomania nuevaCalcomania = new Calcomania();
+                            nuevaCalcomania.nombre = db.DiccionarioListados.Values.ElementAt(i).nombre;
+                            nuevaCalcomania.numero = db.DiccionarioListados.Values.ElementAt(i).faltantes.ElementAt(j);
+                            nuevaCalcomania.falta = true;
+                            db.listaCalcomaniaFaltantes.Add(nuevaCalcomania);
+                            db.listaCalcomaniasCargadas.Add(nuevaCalcomania);
+                        }
+                    }
+
+
+                    foreach (Calcomania item in db.listaCalcomaniasCargadas)
+                    {
+                        db.DiccionarioFaltantes.Add(item, item.falta);
+                    }
 
                     ViewBag.Message = "Cargado Exitosamente";
 
@@ -147,26 +183,44 @@ namespace Lab4ED1.Controllers
                 string csvData = System.IO.File.ReadAllText(filepath);
 
                 
-                db.listaCalcomaniasEstadoCargadas.Clear();
-                Lista<Calcomania> listado = new Lista<Calcomania>();
+                db.listaCalcomaniasCargadas.Clear();
+               
                 try
                 {
                     JObject json = JObject.Parse(csvData);
 
                     foreach (JProperty property in json.Properties())
                     {
-
+                        Lista<int> listado = new Lista<int>();
                         string x = property.Value.ToString();
                         Calcomania y = JsonConvert.DeserializeObject<Calcomania>(x);
 
-                        db.CargaCalcomanias.Add(y, y.falta);
-
-                        
-
-
+                        db.DiccionarioFaltantes.Add(y, y.falta);
+                        db.listaCalcomaniasCargadas.Add(y);
+                        if (y.falta == true)
+                        {
+                            listado.faltantes.Add(y.numero);
+                            db.listaCalcomaniaFaltantes.Add(y);
+                        }
+                        else
+                        {
+                            
+                            if (listado.coleccionadas.Contains(y.numero))
+                            {
+                                listado.cambios.Add(y.numero);
+                                db.listaCalcomaniaCambios.Add(y);
+                            }
+                            else
+                            {
+                                listado.coleccionadas.Add(y.numero);
+                                db.listaCalcomaniaColeccionada.Add(y);
+                            }
+                            
+                        }
+                        db.DiccionarioListados.Add(y.nombre, listado);
                     }
-
-
+                    
+                  
 
                     ViewBag.Message = "Cargado Exitosamente";
 
@@ -192,12 +246,12 @@ namespace Lab4ED1.Controllers
 
         // POST: CargaPartido/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "numero,nombre,falta")] Calcomania calcomania)
         {
             try
             {
                 // TODO: Add update logic here
-
+                
                 return RedirectToAction("Index");
             }
             catch
@@ -214,7 +268,7 @@ namespace Lab4ED1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
+            Calcomania cg = db.listaCalcomaniaColeccionada.Find(x => x.numero == id);
 
             if (cg == null)
             {
@@ -232,16 +286,18 @@ namespace Lab4ED1.Controllers
             {
                 // TODO: Add delete logic here
 
-                Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
-                db.CargaCalcomanias.Remove(cg);
-               
-                
+                Calcomania cg = db.listaCalcomaniaColeccionada.Find(x => x.numero == id);
+                db.DiccionarioFaltantes.Remove(cg);
+                db.DiccionarioListados.Remove(cg.nombre);
 
-                
 
-                
 
-                return RedirectToAction("IndexInNoPartido");
+
+
+
+
+
+                return RedirectToAction("Index");
             }
             catch
             {

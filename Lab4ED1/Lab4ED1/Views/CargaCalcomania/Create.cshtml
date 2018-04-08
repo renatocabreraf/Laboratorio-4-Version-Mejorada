@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <h2>Carga de Archivo Json de album para Listado de tu Colección Oficial de stickers de la COPA MUNDIAL FIFA™</h2>
-                @using (Html.BeginForm("Create", "Calcomania", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("Create", "CargaCalcomania", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <span>Seleccionar archivo:</span>
                     <input type="file" name="postedFile" />
@@ -49,8 +49,8 @@
                 <br />
                 <br />
                 <div>
-                    @Html.ActionLink("Mostrar Stikers faltantes", "Buscar")<br />
-                    @Html.ActionLink("Mostrar Recorrido En Orden por Numero", "IndexInNoPartido")
+                    @Html.ActionLink("Mostrar Stikers faltantes", "Listado")<br />
+                   
                 </div>
                 <div class="neos-nodetypes-headline">
                     <div>

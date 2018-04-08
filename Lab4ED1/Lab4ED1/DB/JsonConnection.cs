@@ -11,12 +11,14 @@ namespace Lab4ED1.DB
     {
         private static volatile JsonConnection Instance;
         private static object syncRoot = new Object();
-        public Dictionary<Calcomania, Lista<Calcomania>> CargaAlbum = new Dictionary<Calcomania, Lista<Calcomania>>();
+        public Dictionary<string, Lista<int>> DiccionarioListados = new Dictionary<string, Lista<int>>();
         
-        public List<Calcomania> listaCalcomaniasCargadas = new List<Calcomania>();
+        public List<Calcomania> listaCalcomaniaColeccionada = new List<Calcomania>();
+        public List<Calcomania> listaCalcomaniaCambios = new List<Calcomania>();
+        public List<Calcomania> listaCalcomaniaFaltantes = new List<Calcomania>();
 
-        public Dictionary<Calcomania, bool> CargaCalcomanias = new Dictionary<Calcomania, bool>();
-        public List<Calcomania> listaCalcomaniasEstadoCargadas = new List<Calcomania>();
+        public Dictionary<Calcomania, bool> DiccionarioFaltantes = new Dictionary<Calcomania, bool>();
+        public List<Calcomania> listaCalcomaniasCargadas = new List<Calcomania>();
 
 
         public int IDActual { get; set; }
