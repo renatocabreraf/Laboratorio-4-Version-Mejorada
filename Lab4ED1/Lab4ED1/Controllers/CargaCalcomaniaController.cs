@@ -14,7 +14,7 @@ namespace Lab4ED1.Controllers
 {
     public class CargaCalcomaniaController : Controller
     {
-       /* JsonConnection db = JsonConnection.getInstance;
+        JsonConnection db = JsonConnection.getInstance;
 
         // GET: CargaCalcomania
         public ActionResult Index()
@@ -29,7 +29,7 @@ namespace Lab4ED1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Calcomania cg = db..Find(x => x.noPartido == id);
+            Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
 
             if (cg == null)
             {
@@ -39,37 +39,14 @@ namespace Lab4ED1.Controllers
             return View(cg);
         }
        
-        public ActionResult Buscar1(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Partido cg = db.listaFechaPartidoCargados.Find(x => x.FechaPartido.ToString("MMddyyyy") == id);
-
-            if (cg == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(cg);
-        }
+        
         public ActionResult Lista()
         {
-            return View(db.listaNoPartidoCargados.ToList());
+            return View(db.listaCalcomaniasCargadas.ToList());
         }
 
 
-        public ActionResult IndexInNoPartido()
-        {
-            return View(db.listaNoPartidoCargados.ToList());
-        }
-
-        public ActionResult IndexInFecha()
-        {
-            return View(db.listaFechaPartidoCargados.ToList());
-        }
+      
 
         // GET: CargaPartido/Details/5
         public ActionResult Details(int id)
@@ -83,46 +60,71 @@ namespace Lab4ED1.Controllers
             return View();
         }
 
-        public static int CompararNumero(int actual, int nuevo)
-        {
-            return actual.CompareTo(nuevo);
-        }
-
-        public static int CompararFecha(DateTime actual, DateTime nuevo)
-        {
-            return actual.CompareTo(nuevo);
-        }
-
-        public static int ObtenerNumero(Partido dato)
-        {
-            return dato.noPartido;
-        }
-
-        public static DateTime ObtenerFecha(Partido dato)
-        {
-            return dato.FechaPartido;
-        }
-
-        public static int CompararEnteros(Partido actual, Partido nuevo)
-        {
-            return actual.noPartido.CompareTo(nuevo.noPartido);
-        }
-
-
-        public static int Compararfecha(Partido actual, Partido nuevo)
-        {
-            return actual.FechaPartido.CompareTo(nuevo.FechaPartido);
-        }
+       
 
         // POST: CargaPartido/Create
         [HttpPost]
         public ActionResult Create(HttpPostedFileBase postedFile)
         {
 
-            db.CargaPartidoFecha.FuncionObtenerLlave = ObtenerFecha;
-            db.CargaPartidoFecha.FuncionCompararLlave = CompararFecha;
-            db.CargaPartidoNum.FuncionObtenerLlave = ObtenerNumero;
-            db.CargaPartidoNum.FuncionCompararLlave = CompararNumero;
+           
+
+
+
+            if (postedFile != null)
+            {
+
+
+                string filepath = string.Empty;
+
+                string path = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                filepath = path + Path.GetFileName(postedFile.FileName);
+                string extension = Path.GetExtension(postedFile.FileName);
+                postedFile.SaveAs(filepath);
+
+                string csvData = System.IO.File.ReadAllText(filepath);
+
+               
+                db.listaCalcomaniasEstadoCargadas.Clear();
+                Lista<Calcomania> listado = new Lista<Calcomania>();
+                try
+                {
+                    JObject json = JObject.Parse(csvData);
+                    
+                    foreach (JProperty property in json.Properties())
+                    {
+
+                        string x = property.Value.ToString();
+                        Calcomania y = JsonConvert.DeserializeObject<Calcomania>(x);
+                        
+                        db.CargaAlbum.Add(y, y.listado);
+
+
+                    }
+                   
+                    
+
+                    ViewBag.Message = "Cargado Exitosamente";
+
+
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Dato erroneo.";
+                }
+
+            }
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create1(HttpPostedFileBase postedFile)
+        {
+
 
 
 
@@ -144,9 +146,9 @@ namespace Lab4ED1.Controllers
 
                 string csvData = System.IO.File.ReadAllText(filepath);
 
-                db.listaFechaPartidoCargados.Clear();
-                db.listaNoPartidoCargados.Clear();
-
+                
+                db.listaCalcomaniasEstadoCargadas.Clear();
+                Lista<Calcomania> listado = new Lista<Calcomania>();
                 try
                 {
                     JObject json = JObject.Parse(csvData);
@@ -155,23 +157,16 @@ namespace Lab4ED1.Controllers
                     {
 
                         string x = property.Value.ToString();
-                        Partido y = JsonConvert.DeserializeObject<Partido>(x);
-                        db.CargaPartidoNum.Insertar(y);
-                        Escribir_archivoNum(y);
-                        if (db.CargaPartidoNum.hizoEquilibrio == true)
-                        {
-                            EscribirEquilibrioNum(y);
-                        }
+                        Calcomania y = JsonConvert.DeserializeObject<Calcomania>(x);
 
-                        db.CargaPartidoFecha.Insertar(y);
-                        Escribir_archivoFecha(y);
-                        if (db.CargaPartidoFecha.hizoEquilibrio == true)
-                        {
-                            EscribirEquilibrioFecha(y);
-                        }
+                        db.CargaCalcomanias.Add(y, y.falta);
+
+                        
+
+
                     }
-                    db.CargaPartidoFecha.EnOrden(RecorrerPartidoInFecha);
-                    db.CargaPartidoNum.EnOrden(RecorrerPartidoInNumero);
+
+
 
                     ViewBag.Message = "Cargado Exitosamente";
 
@@ -186,88 +181,9 @@ namespace Lab4ED1.Controllers
 
             return View();
         }
+       
 
-        public void RecorrerPartidoInFecha(Nodo<Partido> actual)
-        {
-            db.listaFechaPartidoCargados.Add(actual.valor);
-        }
-
-        public void RecorrerPartidoInNumero(Nodo<Partido> actual)
-        {
-            db.listaNoPartidoCargados.Add(actual.valor);
-        }
-
-        public void EscribirEquilibrioNum(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonNum.txt", sobreescribir);
-            sw.WriteLine("Se hizo equilibrio con el partido " + info.noPartido);
-            sw.Close();
-        }
-
-        public void Escribir_archivoNum(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonNum.txt", sobreescribir);
-            sw.WriteLine("Se inserto el partido NO. " + info.noPartido);
-            sw.Close();
-        }
-        public void Escribir_EliminararchivoNum(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonNum.txt", sobreescribir);
-            sw.WriteLine("Se elimino el partido NO. " + info.noPartido);
-            sw.Close();
-        }
-
-        public void EscribirEquilibrioFecha(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonFecha.txt", sobreescribir);
-            sw.WriteLine("Se hizo equilibrio con el partido de fecha " + info.FechaPartido);
-            sw.Close();
-        }
-
-        public void Escribir_archivoFecha(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonFecha.txt", sobreescribir);
-            sw.WriteLine("Se inserto el partido NO. " + info.FechaPartido);
-            sw.Close();
-        }
-
-        public void Escribir_EliminararchivoFecha(Partido info, bool sobreescribir = true)
-        {
-            string ruta = Server.MapPath("~/ArchivoLog/");
-            if (!Directory.Exists(ruta))
-            {
-                Directory.CreateDirectory(ruta);
-            }
-            StreamWriter sw = new StreamWriter(ruta + "\\LogDeArbolJsonFecha.txt", sobreescribir);
-            sw.WriteLine("Se elimino el partido NO. " + info.FechaPartido);
-            sw.Close();
-        }
-
+        
         // GET: CargaPartido/Edit/5
         public ActionResult Edit(int id)
         {
@@ -298,7 +214,7 @@ namespace Lab4ED1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Partido cg = db.listaNoPartidoCargados.Find(x => x.noPartido == id);
+            Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
 
             if (cg == null)
             {
@@ -316,17 +232,14 @@ namespace Lab4ED1.Controllers
             {
                 // TODO: Add delete logic here
 
-                Partido cg = db.listaNoPartidoCargados.Find(x => x.noPartido == id);
-                db.CargaPartidoNum.Eliminar2(cg.noPartido);
-                Escribir_EliminararchivoNum(cg);
-                if (db.CargaPartidoNum.hizoEquilibrio == true)
-                {
-                    EscribirEquilibrioNum(cg);
-                }
+                Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
+                db.CargaCalcomanias.Remove(cg);
+               
+                
 
-                db.listaNoPartidoCargados.Clear();
+                
 
-                db.CargaPartidoNum.EnOrden(RecorrerPartidoInNumero);
+                
 
                 return RedirectToAction("IndexInNoPartido");
             }
@@ -336,53 +249,9 @@ namespace Lab4ED1.Controllers
             }
         }
 
-        [ValidateInput(false)]
-        public ActionResult Delete1(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Partido cg = db.listaFechaPartidoCargados.Find(x => x.FechaPartido.ToString("MMddyyyy") == id);
-
-            if (cg == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(cg);
-        }
-
-        // POST: CargaPartido/Delete/5
-        [HttpPost, ValidateInput(false)]
-        public ActionResult Delete1(string id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                Partido cg = db.listaFechaPartidoCargados.Find(x => x.FechaPartido.ToString("MMddyyyy") == id);
-                db.CargaPartidoFecha.Eliminar2(cg.FechaPartido);
-                Escribir_EliminararchivoFecha(cg);
-                if (db.CargaPartidoFecha.hizoEquilibrio == true)
-                {
-                    EscribirEquilibrioFecha(cg);
-                }
-
-                db.listaFechaPartidoCargados.Clear();
-
-                db.CargaPartidoFecha.EnOrden(RecorrerPartidoInFecha);
-
-                return RedirectToAction("IndexInFecha");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
 
 
-    */
+   
     }
 }

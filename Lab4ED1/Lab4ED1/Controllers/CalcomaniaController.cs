@@ -50,7 +50,7 @@ namespace Lab4ED1.Controllers
 
         // GET: Calcomania/Buscar1
         
-        public ActionResult Lista()
+        public ActionResult Listado()
         {
             return View();
         }
@@ -72,7 +72,7 @@ namespace Lab4ED1.Controllers
         }
         
         [HttpPost]
-        public ActionResult Lista(FormCollection collection)
+        public ActionResult Listado(FormCollection collection)
         {
             try
             {

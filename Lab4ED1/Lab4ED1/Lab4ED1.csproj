@@ -294,14 +294,14 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Calcomania\Create.cshtml" />
+    <Content Include="Views\CargaCalcomania\Create1.cshtml" />
     <Content Include="Views\Calcomania\Buscar.cshtml" />
     <Content Include="Views\Calcomania\Buscar1.cshtml" />
     <Content Include="Views\Calcomania\Listado.cshtml" />
+    <Content Include="Views\CargaCalcomania\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CargaCalcomania\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
