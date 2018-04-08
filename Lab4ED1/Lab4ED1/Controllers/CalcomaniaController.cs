@@ -31,15 +31,25 @@ namespace Lab4ED1.Controllers
             return View();
         }
         // GET: Calcomania/Buscar
-        public ActionResult Buscar()
+        public ActionResult Buscar(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Calcomania cg = db.listaCalcomania.Find(x => x.numero == id);
+
+            if (cg == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(cg);
         }
+
         // GET: Calcomania/Buscar1
-        public ActionResult Buscar1()
-        {
-            return View();
-        }
+        
         public ActionResult Lista()
         {
             return View();
@@ -60,32 +70,8 @@ namespace Lab4ED1.Controllers
                 return View();
             }
         }
-        public ActionResult Buscar(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-        public ActionResult Buscar1(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
+        [HttpPost]
         public ActionResult Lista(FormCollection collection)
         {
             try

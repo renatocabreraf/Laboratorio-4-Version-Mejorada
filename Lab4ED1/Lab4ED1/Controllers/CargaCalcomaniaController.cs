@@ -14,7 +14,7 @@ namespace Lab4ED1.Controllers
 {
     public class CargaCalcomaniaController : Controller
     {
-        JsonConnection db = JsonConnection.getInstance;
+       /* JsonConnection db = JsonConnection.getInstance;
 
         // GET: CargaCalcomania
         public ActionResult Index()
@@ -383,6 +383,6 @@ namespace Lab4ED1.Controllers
         }
 
 
-
+    */
     }
 }
