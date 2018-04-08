@@ -43,7 +43,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.falta)
             </td>
-            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.numero }) |
+                @Html.ActionLink("Details", "Details", new { id = item.numero }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.numero })
+
+            </td>
         </tr>
     }
 </table>

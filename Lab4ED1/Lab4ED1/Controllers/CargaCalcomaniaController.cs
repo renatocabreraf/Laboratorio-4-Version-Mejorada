@@ -19,9 +19,12 @@ namespace Lab4ED1.Controllers
         // GET: CargaCalcomania
         public ActionResult Index()
         {
-            return View();
+            return View(db.listaCalcomaniasCargadas);
         }
-
+        public ActionResult Cambio()
+        {
+            return View(db.listaCalcomaniaCambios);
+        }
         public ActionResult Buscar1()
         {
             return View(db.listaCalcomaniaColeccionada.ToList());
@@ -241,17 +244,39 @@ namespace Lab4ED1.Controllers
         // GET: CargaPartido/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Calcomania cl = db.listaCalcomaniasCargadas.FirstOrDefault(x => x.numero == id);
+
+            if (cl == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(cl);
         }
 
         // POST: CargaPartido/Edit/5
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "numero,nombre,falta")] Calcomania calcomania)
+        public ActionResult Edit([Bind(Include = "numero,nombre,falta")] Calcomania cl)
         {
             try
             {
                 // TODO: Add update logic here
-                
+
+                Calcomania clBuscada = db.listaCalcomaniasCargadas.FirstOrDefault(x => x.numero == cl.numero);
+                if (clBuscada == null)
+                {
+                    return HttpNotFound();
+                }
+                clBuscada.nombre = cl.nombre;
+                clBuscada.numero = cl.numero;
+                clBuscada.falta = cl.falta;
+             
+
                 return RedirectToAction("Index");
             }
             catch
@@ -268,7 +293,7 @@ namespace Lab4ED1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Calcomania cg = db.listaCalcomaniaColeccionada.Find(x => x.numero == id);
+            Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
 
             if (cg == null)
             {
@@ -285,18 +310,22 @@ namespace Lab4ED1.Controllers
             try
             {
                 // TODO: Add delete logic here
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
 
-                Calcomania cg = db.listaCalcomaniaColeccionada.Find(x => x.numero == id);
+               
+
+                
+                Calcomania cg = db.listaCalcomaniasCargadas.Find(x => x.numero == id);
+                if (cg == null)
+                {
+                    return HttpNotFound();
+                }
+                db.listaCalcomaniasCargadas.Remove(cg);
                 db.DiccionarioFaltantes.Remove(cg);
                 db.DiccionarioListados.Remove(cg.nombre);
-
-
-
-
-
-
-
-
                 return RedirectToAction("Index");
             }
             catch
