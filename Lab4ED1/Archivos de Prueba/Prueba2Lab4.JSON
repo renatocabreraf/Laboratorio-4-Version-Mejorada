@@ -1,0 +1,27 @@
+{
+  "Calcomania1": {
+    "nombre": "argentina",
+    "falta": true,
+    "numero": 12
+  },
+  "Calcomania2": {
+    "nombre": "bolivia",
+    "falta": false,
+    "numero": 32
+  },
+  "Calcomania3": {
+    "nombre": "panama",
+    "falta": false,
+    "numero": 25
+  },
+  "Calcomania4": {
+    "nombre": "españa",
+    "falta": true,
+    "numero": 25
+  },
+  "Calcomania5": {
+    "nombre": "especial",
+    "falta": true,
+    "numero": 1
+  }
+}
